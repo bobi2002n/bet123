@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+  <meta charset="UTF-8">
+  <title>Loja e Basteve</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; }
+    input, select, button { margin-top: 8px; display: block; }
+    h1, h2, h3 { margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <h1>Pikët: <span id="points">1000</span></h1>
+
+  <label for="matchSelect">Zgjidh ndeshjen:</label>
+  <select id="matchSelect">
+    <option value="Ndeshja 1">Ndeshja 1</option>
+    <option value="Ndeshja 2">Ndeshja 2</option>
+  </select>
+
+  <label for="team">Zgjidh ekipin (1 ose 2):</label>
+  <input type="text" id="team" placeholder="1 ose 2">
+
+  <label for="amount">Shuma e bastit:</label>
+  <input type="number" id="amount" placeholder="Shkruaj shumën">
+
+  <button onclick="placeBet()">Vendos bast</button>
+
+  <h2>Rezultati:</h2>
+  <p id="result"></p>
+
+  <h3>Historia e basteve:</h3>
+  <ul id="history"></ul>
+
+  <script>
+    let points = 1000;
+    document.getElementById('points').innerText = points;
+
+    function placeBet() {
+      const match = document.getElementById('matchSelect').value;
+      const team = document.getElementById('team').value;
+      const amount = parseInt(document.getElementById('amount').value);
+
+      if (!match || !team || isNaN(amount) || amount <= 0) {
+        alert("Ju lutem plotësoni të gjitha fushat saktë.");
+        return;
+      }
+
+      if (amount > points) {
+        alert("Nuk ke mjaftueshëm pikë.");
+        return;
+      }
+
+      const winner = Math.random() < 0.5 ? "1" : "2";
+      let resultText = "";
+
+      if (team === winner) {
+        const winAmount = amount * 2;
+        points += winAmount;
+        resultText = `Fitove! Fitove ${winAmount} pikë.`;
+      } else {
+        points -= amount;
+        resultText = `Humbje. Humbe ${amount} pikë.`;
+      }
+
+      document.getElementById('points').innerText = points;
+      document.getElementById('result').innerText = resultText;
+
+      const history = document.getElementById('history');
+      const li = document.createElement('li');
+      li.textContent = `${match} - Bast për ekipin ${team} me ${amount} pikë → ${resultText}`;
+      history.appendChild(li);
+
+      document.getElementById('amount').value = '';
+    }
+  </script>
+</body>
+</html>
